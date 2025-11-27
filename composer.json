@@ -1,0 +1,8 @@
+{
+  "name": "maeum-chingu/php2",
+  "description": "마음친구 - 청소년 고민 상담 플랫폼",
+  "type": "project",
+  "require": {
+    "php": "^8.0"
+  }
+}
