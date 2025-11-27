@@ -5,8 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>투표 - 마음친구</title>
 
+    <!-- PWA 설정 -->
+    <meta name="description" content="청소년을 위한 익명 고민 상담 플랫폼">
+    <meta name="theme-color" content="#ff6b9d">
+    <link rel="manifest" href="manifest.json">
+
+    <!-- iOS 지원 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="마음친구">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
     <!-- 파비콘 -->
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 
     <style>
         * {
@@ -780,6 +793,22 @@
                 loadPolls();
             }
         });
+    </script>
+
+    <!-- PWA Service Worker 등록 -->
+    <script>
+        // Service Worker 등록
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('Service Worker 등록 성공:', registration);
+                    })
+                    .catch(error => {
+                        console.log('Service Worker 등록 실패:', error);
+                    });
+            });
+        }
     </script>
 </body>
 </html>

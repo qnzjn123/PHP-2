@@ -80,8 +80,21 @@ $todayQuote = $healingQuotes[$quoteIndex];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>마음친구</title>
 
+    <!-- PWA 설정 -->
+    <meta name="description" content="청소년을 위한 익명 고민 상담 플랫폼">
+    <meta name="theme-color" content="#ff6b9d">
+    <link rel="manifest" href="manifest.json">
+
+    <!-- iOS 지원 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="마음친구">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
     <!-- 파비콘 -->
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 
     <style>
         * {
@@ -146,6 +159,173 @@ $todayQuote = $healingQuotes[$quoteIndex];
             padding: 5px 15px;
             border-radius: 20px;
             margin-left: 10px;
+        }
+
+        /* PWA 설치 섹션 */
+        .pwa-section {
+            margin-top: 30px;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pwa-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pwaGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes pwaGlow {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+
+        .pwa-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .pwa-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: pwaBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes pwaBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .pwa-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .pwa-description {
+            font-size: 14px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .pwa-install-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .pwa-install-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .pwa-install-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .pwa-status {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+
+        .pwa-features {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .pwa-feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* 업데이트 알림 토스트 */
+        .update-toast {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            z-index: 9998;
+            animation: slideInRight 0.5s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .update-toast.show {
+            display: block;
+        }
+
+        .update-toast-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .update-icon {
+            font-size: 24px;
+            animation: rotate 2s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .update-text {
+            flex: 1;
+        }
+
+        .update-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .update-desc {
+            font-size: 12px;
+            opacity: 0.9;
         }
 
         .mood-section {
@@ -1644,6 +1824,24 @@ $todayQuote = $healingQuotes[$quoteIndex];
                 </button>
             </div>
 
+            <!-- PWA 간편 설치 섹션 -->
+            <div class="pwa-section" id="pwaSection">
+                <div class="pwa-content">
+                    <div class="pwa-icon">📱</div>
+                    <h3 class="pwa-title">📲 앱으로 간편 설치</h3>
+                    <p class="pwa-description">
+                        버튼 클릭 한 번으로 설치!<br>
+                        <strong style="color: #fff; font-size: 16px;">설치 후 → 바탕화면/앱 목록에서 "마음친구" 찾기</strong>
+                    </p>
+                    <button class="pwa-install-btn" id="pwaInstallBtn" onclick="installPWA()">
+                        📱 1초 만에 설치하기
+                    </button>
+                    <div class="pwa-status" id="pwaStatus" style="margin-top: 12px; font-size: 13px;">
+                        버튼 클릭 → 설치 팝업 → 설치 완료!
+                    </div>
+                </div>
+            </div>
+
             <div class="mood-section">
                 <h3 class="mood-title">오늘 기분 기록</h3>
                 <div class="mood-buttons">
@@ -2737,6 +2935,223 @@ $todayQuote = $healingQuotes[$quoteIndex];
                 closeWriteModal();
             }
         }
+    </script>
+
+    <!-- 업데이트 알림 토스트 -->
+    <div class="update-toast" id="updateToast">
+        <div class="update-toast-content">
+            <div class="update-icon">🔄</div>
+            <div class="update-text">
+                <div class="update-title">새 버전 발견!</div>
+                <div class="update-desc">페이지를 새로고침하는 중...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PWA Service Worker 등록 및 설치 알림 -->
+    <script>
+        // PWA 전역 변수
+        let deferredPrompt;
+        let swRegistration = null;
+
+        // Service Worker 등록 및 자동 업데이트
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('✅ Service Worker 등록 성공:', registration);
+                        swRegistration = registration;
+
+                        // 업데이트 확인 (1분마다)
+                        setInterval(() => {
+                            registration.update();
+                        }, 60000);
+
+                        // 업데이트 감지
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            console.log('🔄 새 버전 발견!');
+
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // 새 버전이 설치됨
+                                    showUpdateToast();
+
+                                    // 3초 후 자동 새로고침
+                                    setTimeout(() => {
+                                        window.location.reload();
+                                    }, 3000);
+                                }
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        console.log('❌ Service Worker 등록 실패:', error);
+                    });
+
+                // 컨트롤러 변경 감지 (Service Worker가 활성화됨)
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    console.log('🔄 Service Worker 업데이트됨');
+                });
+            });
+        }
+
+        // 업데이트 토스트 표시
+        function showUpdateToast() {
+            const toast = document.getElementById('updateToast');
+            toast.classList.add('show');
+            console.log('🎉 업데이트 알림 표시');
+        }
+
+        // PWA 설치 상태 확인 (간편 버전)
+        function updatePWAStatus() {
+            const pwaBtn = document.getElementById('pwaInstallBtn');
+            const pwaStatus = document.getElementById('pwaStatus');
+
+            if (!pwaBtn || !pwaStatus) return;
+
+            // 이미 설치된 경우
+            if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+                pwaBtn.textContent = '✅ 설치됨';
+                pwaBtn.disabled = true;
+                pwaBtn.style.opacity = '0.6';
+                pwaBtn.style.cursor = 'not-allowed';
+                pwaBtn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)';
+                pwaStatus.textContent = '시작 메뉴에서 "마음친구" 검색!';
+                pwaStatus.style.background = 'rgba(76, 175, 80, 0.3)';
+                return;
+            }
+
+            // iOS 사용자
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            if (isIOS) {
+                pwaBtn.textContent = '📱 iPhone 설치 방법';
+                pwaStatus.textContent = 'Safari에서 공유버튼(↑) 클릭';
+                return;
+            }
+
+            // 기본 상태
+            pwaBtn.disabled = false;
+            pwaStatus.textContent = '버튼 클릭 → 설치 팝업 → 설치 완료!';
+        }
+
+        // PWA 설치 함수 (간편 버전)
+        async function installPWA() {
+            const pwaBtn = document.getElementById('pwaInstallBtn');
+            const pwaStatus = document.getElementById('pwaStatus');
+
+            // 이미 설치된 경우
+            if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+                alert('✅ 이미 설치되어 있습니다!\n\n🔍 앱 찾는 방법:\n• Windows: 시작 메뉴에서 "마음친구" 검색\n• 바탕화면에 아이콘 확인\n• 앱 목록에서 찾기');
+                return;
+            }
+
+            // iOS 사용자 간편 안내
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            if (isIOS) {
+                alert('📱 iPhone 설치 방법 (3단계)\n\n1️⃣ Safari 하단 공유버튼(↑) 클릭\n2️⃣ "홈 화면에 추가" 선택\n3️⃣ 완료! 홈 화면에서 실행');
+                return;
+            }
+
+            // deferredPrompt가 없으면 대기
+            if (!deferredPrompt) {
+                pwaBtn.textContent = '⏳ 준비 중...';
+                pwaStatus.textContent = '잠시만 기다려주세요...';
+
+                // 3초만 대기
+                let waitCount = 0;
+                const waitInterval = setInterval(() => {
+                    waitCount++;
+                    if (deferredPrompt) {
+                        clearInterval(waitInterval);
+                        installPWA(); // 자동 재시도
+                    } else if (waitCount >= 30) { // 3초
+                        clearInterval(waitInterval);
+                        pwaBtn.textContent = '📱 1초 만에 설치하기';
+                        pwaBtn.disabled = false;
+
+                        // 간단한 대체 안내
+                        alert('💡 설치 방법\n\n1️⃣ 주소창 오른쪽 아이콘 클릭\n2️⃣ "설치" 버튼 클릭\n\n또는 Chrome 브라우저 사용 권장');
+                        pwaStatus.textContent = '주소창에서 설치하거나 Chrome 사용';
+                    }
+                }, 100);
+                return;
+            }
+
+            // 설치 진행
+            try {
+                pwaBtn.textContent = '📥 설치 중...';
+                pwaBtn.disabled = true;
+                pwaStatus.textContent = '팝업이 나타나면 "설치" 클릭!';
+
+                await deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+
+                if (outcome === 'accepted') {
+                    // 설치 성공!
+                    pwaBtn.textContent = '✅ 설치 완료!';
+                    pwaBtn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)';
+                    pwaStatus.textContent = '🎉 설치 성공!';
+                    pwaStatus.style.background = 'rgba(76, 175, 80, 0.3)';
+
+                    // 상세 안내
+                    setTimeout(() => {
+                        alert('🎉 설치 완료!\n\n📍 앱 찾는 방법:\n\n【 Windows 】\n• 시작 메뉴 → "마음친구" 검색\n• 바탕화면 확인\n• 작업표시줄에 고정 가능\n\n【 Android 】\n• 앱 서랍에서 "마음친구"\n• 홈 화면에 추가됨\n\n지금 바로 사용해보세요! 💕');
+                    }, 500);
+
+                    setTimeout(() => {
+                        pwaBtn.style.opacity = '0.6';
+                        pwaBtn.style.cursor = 'not-allowed';
+                    }, 2000);
+                } else {
+                    // 설치 취소
+                    pwaBtn.textContent = '📱 1초 만에 설치하기';
+                    pwaBtn.disabled = false;
+                    pwaStatus.textContent = '버튼 클릭 → 설치 팝업 → 설치 완료!';
+                }
+
+                deferredPrompt = null;
+            } catch (error) {
+                console.error('설치 오류:', error);
+                pwaBtn.textContent = '📱 1초 만에 설치하기';
+                pwaBtn.disabled = false;
+                pwaStatus.textContent = '다시 시도해주세요';
+                alert('⚠️ 오류 발생\n\n다시 시도하거나\nChrome 브라우저를 사용해주세요!');
+            }
+        }
+
+        // beforeinstallprompt 이벤트 리스너 (간편 버전)
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            console.log('✅ PWA 설치 준비 완료!');
+
+            const pwaBtn = document.getElementById('pwaInstallBtn');
+            const pwaStatus = document.getElementById('pwaStatus');
+
+            if (pwaBtn && pwaStatus) {
+                pwaBtn.disabled = false;
+                pwaBtn.style.opacity = '1';
+                pwaBtn.style.cursor = 'pointer';
+                pwaStatus.textContent = '👆 지금 클릭하면 바로 설치됩니다!';
+                pwaStatus.style.background = 'rgba(76, 175, 80, 0.3)';
+                pwaStatus.style.fontWeight = '700';
+
+                // 눈에 띄는 애니메이션
+                pwaBtn.style.animation = 'pulse 1.2s ease-in-out 5';
+            }
+        });
+
+        // appinstalled 이벤트 리스너
+        window.addEventListener('appinstalled', () => {
+            console.log('🎉 PWA가 설치되었습니다');
+            updatePWAStatus();
+        });
+
+        // 페이지 로드 시 PWA 상태 확인
+        window.addEventListener('load', () => {
+            updatePWAStatus();
+        });
     </script>
 </body>
 </html>
